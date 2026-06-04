@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>약재 상세 정보 | 성산부부한의원</title>
   <link rel="stylesheet" href="style.css">
-  <script src="data.js?v=20260604122719"></script>
+  <script src="data.js?v=20260604175549"></script>
 </head>
 <body>
 
@@ -174,10 +174,12 @@
     document.getElementById('detail-effects').innerHTML =
       medicine.effects.map(e => `<div class="effect-item">✓ ${e}</div>`).join('');
 
-    // 구매 버튼 링크
-    const orderUrl = `order.html?medicine=${encodeURIComponent(medicine.name)}`;
-    document.getElementById('order-btn-desktop').href = orderUrl;
-    document.getElementById('order-btn-mobile').href  = orderUrl;
+    // 구매 버튼 → 초진 구글폼으로 바로 연결
+    const orderUrl = CLINIC_INFO.formFirstVisit || 'order.html';
+    document.getElementById('order-btn-desktop').href   = orderUrl;
+    document.getElementById('order-btn-desktop').target = '_blank';
+    document.getElementById('order-btn-mobile').href    = orderUrl;
+    document.getElementById('order-btn-mobile').target  = '_blank';
 
     // 대표이미지
     if (medicine.image) {
