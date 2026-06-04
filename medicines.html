@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비급여 한약 목록 | 성산부부한의원</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo" id="clinic-name-header">한의원</a>
+    <nav>
+      <a href="index.html">홈</a>
+      <a href="medicines.html" class="active">비급여 목록</a>
+      <a href="order.html">구매 신청</a>
+    </nav>
+  </div>
+</header>
+
+<div style="background:var(--green); color:#fff; padding:28px 16px;">
+  <div class="container">
+    <h1 style="font-size:1.5rem; font-weight:700;">비급여 한약 목록</h1>
+    <p style="opacity:0.85; font-size:0.9rem; margin-top:4px;">
+      아래 한약들은 건강보험이 적용되지 않는 비급여 항목입니다.
+    </p>
+  </div>
+</div>
+
+<div class="container">
+  <!-- 카테고리 필터 -->
+  <div class="filter-bar" id="filter-bar"></div>
+
+  <!-- 약재 그리드 -->
+  <div class="medicine-grid" id="medicine-grid"></div>
+</div>
+
+<div style="text-align:center; padding:32px 16px;">
+  <a href="order.html" class="btn btn-green btn-lg">구매 신청하기 →</a>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <strong id="footer-name"></strong><br>
+    <span id="footer-address"></span> · <span id="footer-phone"></span><br>
+    <small style="margin-top:8px; display:block;">가격은 부가세 포함이며, 개인 상태에 따라 처방이 달라질 수 있습니다.</small>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('clinic-name-header').textContent = CLINIC_INFO.name;
+  document.getElementById('footer-name').textContent = CLINIC_INFO.name;
+  document.getElementById('footer-address').textContent = CLINIC_INFO.address;
+  document.getElementById('footer-phone').textContent = CLINIC_INFO.phone;
+
+  let activeCategory = '전체';
+
+  function renderFilters() {
+    const bar = document.getElementById('filter-bar');
+    bar.innerHTML = CATEGORIES.map(cat => `
+      <button class="filter-btn ${cat === activeCategory ? 'active' : ''}"
+              onclick="setCategory('${cat}')">${cat}</button>
+    `).join('');
+  }
+
+  function setCategory(cat) {
+    activeCategory = cat;
+    renderFilters();
+    renderGrid();
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('medicine-grid');
+    const filtered = activeCategory === '전체'
+      ? MEDICINES
+      : MEDICINES.filter(m => m.category === activeCategory);
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<p style="color:var(--muted); padding:24px 0;">해당 카테고리의 약재가 없습니다.</p>';
+      return;
+    }
+
+    grid.innerHTML = filtered.map(m => `
+      <a href="detail.html?id=${m.id}" class="card medicine-card">
+        ${m.image
+          ? `<img class="medicine-thumb" src="${m.image}" alt="${m.name}" loading="lazy">`
+          : `<div class="medicine-thumb-placeholder">🌿</div>`
+        }
+        <div class="medicine-card-body">
+          <div class="medicine-card-header">
+            <h3>${m.name}</h3>
+            <span class="category-badge">${m.category}</span>
+          </div>
+          <div class="tags">
+            ${m.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+          </div>
+          <p class="summary">${m.summary}</p>
+          <div class="medicine-card-footer">
+            <div>
+              <span class="price">₩${m.price}</span>
+              <span class="price-unit"> / ${m.unit}</span>
+            </div>
+            <span style="font-size:0.8rem; color:var(--green); font-weight:600;">상세보기 →</span>
+          </div>
+        </div>
+      </a>
+    `).join('');
+  }
+
+  renderFilters();
+  renderGrid();
+</script>
+</body>
+</html>
