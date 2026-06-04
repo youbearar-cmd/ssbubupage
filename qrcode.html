@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR 코드 생성 — 관리자용</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+  <!-- qrcode.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body style="min-height:100vh; display:flex; flex-direction:column;">
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo" id="clinic-name-header">한의원</a>
+    <nav>
+      <a href="index.html">← 사이트로 이동</a>
+    </nav>
+  </div>
+</header>
+
+<section class="section" style="flex:1;">
+  <div class="container" style="max-width:560px; margin:0 auto;">
+
+    <h1 class="section-title">QR 코드 생성</h1>
+    <p class="section-subtitle">사이트 URL을 입력하면 QR 코드가 생성됩니다. 인쇄하여 한의원에 부착하세요.</p>
+
+    <div class="card" style="padding:24px; margin-bottom:24px;">
+      <label style="font-size:0.875rem; font-weight:600; color:var(--muted); display:block; margin-bottom:6px;">
+        사이트 URL (호스팅 완료 후 입력)
+      </label>
+      <div style="display:flex; gap:8px;">
+        <input type="url" id="url-input"
+          placeholder="https://your-clinic.github.io/..."
+          style="flex:1; padding:10px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; outline:none;"
+          oninput="generateQR()"
+        >
+        <button class="btn btn-green" onclick="generateQR()">생성</button>
+      </div>
+    </div>
+
+    <div class="card" style="padding:32px; text-align:center;">
+      <div id="qr-container" style="display:inline-block; padding:16px; background:#fff; border-radius:8px;"></div>
+      <div id="qr-placeholder" style="width:200px; height:200px; background:#F3F4F6; border-radius:8px; display:flex; align-items:center; justify-content:center; margin:0 auto; color:var(--muted); font-size:0.875rem;">
+        URL을 입력하면<br>QR 코드가 표시됩니다
+      </div>
+
+      <div style="margin-top:20px;">
+        <p style="font-size:0.875rem; color:var(--muted); margin-bottom:12px;" id="qr-url-display"></p>
+        <button class="btn btn-green" onclick="printQR()" id="print-btn" style="display:none;">
+          🖨️ 인쇄하기
+        </button>
+        <button class="btn btn-gold" onclick="downloadQR()" id="download-btn" style="display:none; margin-left:8px;">
+          💾 이미지 저장
+        </button>
+      </div>
+    </div>
+
+    <div class="notice-box" style="margin-top:20px;">
+      <strong>📌 사용 방법</strong>
+      <ol style="margin-top:8px; padding-left:18px; line-height:1.9; font-size:0.875rem;">
+        <li>GitHub Pages 또는 Netlify에 사이트를 배포합니다.</li>
+        <li>배포된 URL(예: <code>https://xxx.github.io/hanui</code>)을 위 입력창에 붙여넣습니다.</li>
+        <li>QR 코드를 인쇄하여 한의원 원내에 부착합니다.</li>
+        <li>환자가 스캔하면 비급여 목록 페이지로 바로 연결됩니다.</li>
+      </ol>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <strong id="footer-name"></strong> — 관리자 페이지<br>
+    <small>이 페이지는 환자에게 공개되지 않습니다.</small>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('clinic-name-header').textContent = CLINIC_INFO.name;
+  document.getElementById('footer-name').textContent = CLINIC_INFO.name;
+
+  let qrInstance = null;
+
+  function generateQR() {
+    const url = document.getElementById('url-input').value.trim();
+    const container = document.getElementById('qr-container');
+    const placeholder = document.getElementById('qr-placeholder');
+
+    if (!url) {
+      container.style.display = 'none';
+      placeholder.style.display = 'flex';
+      document.getElementById('print-btn').style.display = 'none';
+      document.getElementById('download-btn').style.display = 'none';
+      document.getElementById('qr-url-display').textContent = '';
+      return;
+    }
+
+    placeholder.style.display = 'none';
+    container.style.display = 'inline-block';
+    container.innerHTML = '';
+
+    qrInstance = new QRCode(container, {
+      text: url,
+      width: 200,
+      height: 200,
+      colorDark: '#1A1A1A',
+      colorLight: '#FFFFFF',
+      correctLevel: QRCode.CorrectLevel.H,
+    });
+
+    document.getElementById('qr-url-display').textContent = url;
+    document.getElementById('print-btn').style.display = 'inline-flex';
+    document.getElementById('download-btn').style.display = 'inline-flex';
+  }
+
+  function printQR() {
+    const url = document.getElementById('url-input').value.trim();
+    const qrHtml = document.getElementById('qr-container').innerHTML;
+    const w = window.open('', '_blank');
+    w.document.write(`
+      <!DOCTYPE html><html lang="ko"><head>
+      <meta charset="UTF-8">
+      <style>
+        body { font-family: 'Apple SD Gothic Neo', sans-serif; text-align: center; padding: 40px; }
+        h2 { font-size: 1.4rem; margin-bottom: 8px; }
+        p { color: #6B7280; font-size: 0.85rem; margin-bottom: 20px; }
+        .qr { display: inline-block; padding: 16px; border: 2px solid #E8E4DC; border-radius: 12px; }
+        small { display: block; margin-top: 16px; color: #9CA3AF; font-size: 0.75rem; }
+      </style>
+      </head><body>
+      <h2>${CLINIC_INFO.name} 비급여 안내</h2>
+      <p>QR 코드를 스캔하면 비급여 한약 목록을 확인하실 수 있습니다.</p>
+      <div class="qr">${qrHtml}</div>
+      <small>${url}</small>
+      </body></html>
+    `);
+    w.document.close();
+    w.focus();
+    setTimeout(() => w.print(), 500);
+  }
+
+  function downloadQR() {
+    const canvas = document.querySelector('#qr-container canvas');
+    if (!canvas) return;
+    const link = document.createElement('a');
+    link.download = 'qrcode-hanui.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+</script>
+</body>
+</html>
