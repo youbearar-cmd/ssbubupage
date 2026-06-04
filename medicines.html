@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>비급여 한약 목록 | 성산부부한의원</title>
   <link rel="stylesheet" href="style.css">
-  <script src="data.js?v=20260604122719"></script>
+  <script src="data.js?v=20260604175549"></script>
 </head>
 <body>
 
@@ -38,8 +38,12 @@
 </div>
 
 <div style="text-align:center; padding:32px 16px;">
-  <a href="order.html" class="btn btn-green btn-lg">구매 신청하기 →</a>
+  <a id="main-order-btn" href="order.html" class="btn btn-green btn-lg" target="_blank">구매 신청하기 →</a>
 </div>
+<script>
+  var _form = CLINIC_INFO.formFirstVisit;
+  if (_form) document.getElementById('main-order-btn').href = _form;
+</script>
 
 <footer class="site-footer">
   <div class="container">
