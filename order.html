@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비대면 처방 신청 | 성산부부한의원</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+  <style>
+    /* 탭 피드백: 카드 전체가 버튼처럼 느껴지도록 */
+    .visit-card:active { background: #D1F0E3; border-color: var(--green); }
+
+    /* 모바일에서 visit 카드 내부 버튼 숨기기 (카드 자체가 클릭 영역) */
+    @media (max-width: 640px) {
+      .visit-card-btn { display: none; }
+      .visit-card { padding: 28px 12px 24px; }
+    }
+
+    /* 전화 링크 */
+    .tel-link {
+      color: var(--green);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo" id="clinic-name-header">한의원</a>
+    <nav>
+      <a href="index.html">홈</a>
+      <a href="medicines.html">목록</a>
+      <a href="order.html" class="active">구매 신청</a>
+    </nav>
+  </div>
+</header>
+
+<div style="background:var(--green); color:#fff; padding:24px 16px 28px;">
+  <div class="container">
+    <h1 style="font-size:1.4rem; font-weight:700; line-height:1.3;">구매 신청</h1>
+    <p style="opacity:0.85; font-size:0.875rem; margin-top:4px;">
+      방문 유형을 선택하면 신청 양식으로 바로 이동합니다.
+    </p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container" style="max-width:600px; margin:0 auto;">
+
+    <!-- 선택한 약재 표시 (상세 페이지에서 넘어온 경우) -->
+    <div id="medicine-notice" style="display:none;" class="notice-box">
+      <strong>📌 선택하신 약재</strong>
+      <span id="medicine-name-display"></span>
+    </div>
+
+    <!-- 초진 / 재진 선택 -->
+    <h2 style="font-size:1rem; font-weight:700; margin-bottom:4px; color:var(--text);">
+      방문 유형을 선택해 주세요
+    </h2>
+    <p style="font-size:0.85rem; color:var(--muted); margin-bottom:14px;">
+      해당 항목을 누르면 전용 신청 양식으로 이동합니다.
+    </p>
+
+    <div class="visit-cards">
+      <!-- 초진 -->
+      <div class="visit-card" role="button" tabindex="0"
+           onclick="goToForm('first')"
+           onkeydown="if(event.key==='Enter'||event.key===' ')goToForm('first')">
+        <div class="visit-icon">🌱</div>
+        <h3>초진</h3>
+        <p>처음 방문하시거나<br>1년 이상 내원하지 않으신 분</p>
+        <div class="visit-card-btn" style="margin-top:14px;">
+          <span class="btn btn-green" style="pointer-events:none; min-height:40px; padding:0 18px; font-size:0.85rem;">
+            초진 신청폼 →
+          </span>
+        </div>
+      </div>
+
+      <!-- 재진 -->
+      <div class="visit-card" role="button" tabindex="0"
+           onclick="goToForm('revisit')"
+           onkeydown="if(event.key==='Enter'||event.key===' ')goToForm('revisit')">
+        <div class="visit-icon">🌿</div>
+        <h3>재진</h3>
+        <p>기존에 내원하신 경험이 있는<br>현재 환자분</p>
+        <div class="visit-card-btn" style="margin-top:14px;">
+          <span class="btn btn-gold" style="pointer-events:none; min-height:40px; padding:0 18px; font-size:0.85rem;">
+            재진 신청폼 →
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 안내 박스 -->
+    <div class="notice-box">
+      <strong>📋 신청 전 확인사항</strong>
+      <ul style="margin-top:6px; padding-left:18px; line-height:2.0;">
+        <li>구글폼 제출 후 <strong>한의원으로 자동 접수</strong>됩니다.</li>
+        <li>접수 후 담당 직원이 연락드립니다 (영업일 기준).</li>
+        <li>한약은 반드시 <strong>한의사 상담·처방</strong> 후 복용하세요.</li>
+        <li>처방에 따라 가격이 달라질 수 있습니다.</li>
+      </ul>
+    </div>
+
+    <div class="danger-box" style="margin-top:10px;">
+      ⚠ 응급 상황이거나 증상이 심한 경우<br>
+      전화 <a class="tel-link" id="phone-link" href="#">000-0000-0000</a>으로 직접 문의하세요.
+    </div>
+
+    <div style="text-align:center; margin-top:28px; padding-bottom:8px; color:var(--muted); font-size:0.85rem;">
+      어떤 약을 골라야 할지 모르겠으신가요?<br>
+      <a href="medicines.html" style="color:var(--green); font-weight:700; text-decoration:underline; text-underline-offset:2px;">
+        비급여 목록을 먼저 확인해 보세요 →
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <strong id="footer-name"></strong><br>
+    <span id="footer-address"></span><br>
+    <span id="footer-phone"></span><br>
+    <small style="margin-top:6px; display:block; opacity:0.7;">구글폼 제출 내용은 한의원에 즉시 전달됩니다.</small>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('clinic-name-header').textContent = CLINIC_INFO.name;
+  document.getElementById('footer-name').textContent        = CLINIC_INFO.name;
+  document.getElementById('footer-address').textContent     = CLINIC_INFO.address;
+  document.getElementById('footer-phone').textContent       = CLINIC_INFO.phone;
+
+  var phoneLink = document.getElementById('phone-link');
+  phoneLink.textContent = CLINIC_INFO.phone;
+  phoneLink.href = 'tel:' + CLINIC_INFO.phone.replace(/-/g, '');
+
+  // 상세 페이지에서 넘어온 약재명 표시
+  var params   = new URLSearchParams(location.search);
+  var medicine = params.get('medicine');
+  if (medicine) {
+    document.getElementById('medicine-notice').style.display = 'block';
+    document.getElementById('medicine-name-display').textContent = ' ' + decodeURIComponent(medicine);
+  }
+
+  function goToForm(type) {
+    var url = type === 'first' ? CLINIC_INFO.formFirstVisit : CLINIC_INFO.formRevisit;
+    if (!url || url.includes('FORM_ID')) {
+      alert('구글폼 URL이 아직 설정되지 않았습니다.\n관리자 페이지에서 구글폼 URL을 입력해 주세요.');
+      return;
+    }
+    window.location.href = url;
+  }
+</script>
+</body>
+</html>
