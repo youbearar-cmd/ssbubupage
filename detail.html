@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>약재 상세 정보 | 성산부부한의원</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo" id="clinic-name-header">한의원</a>
+    <nav>
+      <a href="index.html">홈</a>
+      <a href="medicines.html">목록</a>
+      <a href="order.html">구매 신청</a>
+    </nav>
+  </div>
+</header>
+
+<div id="page-content">
+  <!-- 히어로 -->
+  <div class="detail-hero">
+    <div class="container">
+      <a href="medicines.html" class="back-link">← 목록으로</a>
+      <div class="tags" id="detail-tags"></div>
+      <h1 id="detail-name"></h1>
+      <p class="summary" id="detail-summary"></p>
+    </div>
+  </div>
+
+  <!-- 본문 -->
+  <div class="detail-body">
+    <div class="container detail-grid" style="display:grid; grid-template-columns:1fr 272px; gap:28px; align-items:start;">
+
+      <!-- 왼쪽: 상세 정보 -->
+      <div>
+        <!-- 대표이미지 -->
+        <div id="detail-main-img-wrap" style="display:none;">
+          <img id="detail-main-img" class="detail-main-img" src="" alt="">
+        </div>
+
+        <div class="detail-section">
+          <h3>소개</h3>
+          <div id="detail-description" class="rich-content"></div>
+        </div>
+        <div class="detail-section">
+          <h3>주요 효능</h3>
+          <div class="effects-list" id="detail-effects"></div>
+        </div>
+        <div class="detail-section">
+          <h3>주성분</h3>
+          <p id="detail-ingredients"></p>
+        </div>
+        <div class="detail-section">
+          <h3>복용법</h3>
+          <div class="info-box" id="detail-dosage"></div>
+        </div>
+        <div class="detail-section">
+          <h3>주의사항</h3>
+          <div class="danger-box" id="detail-caution"></div>
+        </div>
+
+        <!-- 상세이미지 갤러리 -->
+        <div class="detail-section" id="detail-gallery-section" style="display:none;">
+          <h3>상세 이미지</h3>
+          <div class="detail-gallery" id="detail-gallery"></div>
+        </div>
+      </div>
+
+      <!-- 오른쪽: 가격 + 신청 (데스크톱 전용 사이드바) -->
+      <div class="detail-desktop-sidebar" style="position:sticky; top:68px;">
+        <div class="price-card">
+          <div class="price-label">비급여 가격</div>
+          <div class="price-amount" id="detail-price-desktop"></div>
+          <div class="price-per" id="detail-unit-desktop"></div>
+        </div>
+        <div class="notice-box" style="font-size:0.82rem;">
+          <strong>📌 처방 후 구매 안내</strong>
+          한약은 반드시 한의사 상담·처방 후 복용하시기 바랍니다.
+        </div>
+        <a href="order.html" class="btn btn-gold btn-full" style="margin-top:12px; min-height:52px; font-size:1rem;" id="order-btn-desktop">
+          구매 신청하기
+        </a>
+        <a href="medicines.html" class="btn btn-full" style="margin-top:8px; min-height:44px; border:1.5px solid var(--border); color:var(--muted); background:transparent;">
+          다른 약 보기
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 약재를 못 찾을 경우 -->
+<div id="not-found" style="display:none; text-align:center; padding:80px 16px;">
+  <p style="font-size:1.1rem; color:var(--muted);">해당 약재를 찾을 수 없습니다.</p>
+  <a href="medicines.html" class="btn btn-green" style="margin-top:20px;">목록으로 돌아가기</a>
+</div>
+
+<!-- 라이트박스 -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- ★ 모바일 하단 고정 구매 바 -->
+<div class="mobile-cta-bar" id="mobile-cta">
+  <div class="cta-price">
+    <span class="cta-price-label">비급여 가격</span>
+    <span class="cta-price-amount" id="cta-price-amount"></span>
+    <span class="cta-price-unit" id="cta-price-unit"></span>
+  </div>
+  <a href="order.html" class="btn btn-gold" id="order-btn-mobile"
+     style="flex:1; min-height:52px; font-size:1rem; border-radius:10px;">
+    구매 신청하기
+  </a>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <strong id="footer-name"></strong><br>
+    <span id="footer-address"></span> · <span id="footer-phone"></span><br>
+    <small style="margin-top:6px; display:block; opacity:0.7;">가격은 부가세 포함이며, 개인 상태에 따라 처방이 달라질 수 있습니다.</small>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('clinic-name-header').textContent = CLINIC_INFO.name;
+  document.getElementById('footer-name').textContent        = CLINIC_INFO.name;
+  document.getElementById('footer-address').textContent     = CLINIC_INFO.address;
+  document.getElementById('footer-phone').textContent       = CLINIC_INFO.phone;
+
+  const params   = new URLSearchParams(location.search);
+  const medicine = MEDICINES.find(m => m.id === params.get('id'));
+
+  if (!medicine) {
+    document.getElementById('page-content').style.display = 'none';
+    document.getElementById('not-found').style.display    = 'block';
+    document.getElementById('mobile-cta').style.display   = 'none';
+  } else {
+    document.title = medicine.name + ' — ' + CLINIC_INFO.name;
+
+    // 내용 채우기
+    document.getElementById('detail-name').textContent        = medicine.name;
+    document.getElementById('detail-summary').textContent     = medicine.summary;
+    // HTML 또는 plain text 모두 처리
+    var desc = medicine.description || '';
+    if (desc && !/<[a-z][\s\S]*>/i.test(desc)) {
+      desc = desc.split('\n').map(function(l){ return '<p>' + (l||'<br>') + '</p>'; }).join('');
+    }
+    document.getElementById('detail-description').innerHTML = desc;
+    document.getElementById('detail-ingredients').textContent = medicine.ingredients;
+    document.getElementById('detail-dosage').textContent      = medicine.dosage;
+    document.getElementById('detail-caution').textContent     = medicine.caution;
+
+    // 데스크톱 사이드바 가격
+    document.getElementById('detail-price-desktop').textContent = '₩' + medicine.price;
+    document.getElementById('detail-unit-desktop').textContent  = medicine.unit;
+
+    // 모바일 하단 바 가격
+    document.getElementById('cta-price-amount').textContent = '₩' + medicine.price;
+    document.getElementById('cta-price-unit').textContent   = medicine.unit;
+
+    // 태그
+    document.getElementById('detail-tags').innerHTML =
+      `<span class="category-badge" style="margin-bottom:10px;">${medicine.category}</span>` +
+      medicine.tags.map(t =>
+        `<span class="tag" style="background:rgba(255,255,255,0.2);color:#fff;">${t}</span>`
+      ).join('');
+
+    // 효능 목록
+    document.getElementById('detail-effects').innerHTML =
+      medicine.effects.map(e => `<div class="effect-item">✓ ${e}</div>`).join('');
+
+    // 구매 버튼 링크
+    const orderUrl = `order.html?medicine=${encodeURIComponent(medicine.name)}`;
+    document.getElementById('order-btn-desktop').href = orderUrl;
+    document.getElementById('order-btn-mobile').href  = orderUrl;
+
+    // 대표이미지
+    if (medicine.image) {
+      const mainImgWrap = document.getElementById('detail-main-img-wrap');
+      const mainImg     = document.getElementById('detail-main-img');
+      mainImg.src = medicine.image;
+      mainImg.alt = medicine.name;
+      mainImg.onclick = () => openLightbox(medicine.image);
+      mainImg.style.cursor = 'zoom-in';
+      mainImgWrap.style.display = 'block';
+    }
+
+    // 상세이미지 갤러리
+    if (medicine.images && medicine.images.length > 0) {
+      const gallery = document.getElementById('detail-gallery');
+      const section = document.getElementById('detail-gallery-section');
+      gallery.innerHTML = medicine.images.map((url, i) =>
+        `<div class="detail-gallery-item" onclick="openLightbox('${url}')">
+          <img src="${url}" alt="상세이미지${i+1}" loading="lazy">
+        </div>`
+      ).join('');
+      section.style.display = 'block';
+    }
+  }
+
+  function openLightbox(url) {
+    document.getElementById('lightbox-img').src = url;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+</body>
+</html>
