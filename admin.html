@@ -1298,9 +1298,10 @@ function uploadImageFile(file, onSuccess) {
       ghCommitFile(ghOwner, ghRepo, ghToken, filename, b64, '이미지 업로드: ' + file.name)
       .then(function(r) { return r && r.json(); })
       .then(function(data) {
-        if (data && data.content && data.content.download_url) {
-          // GitHub API가 직접 알려주는 URL 사용 (브랜치명 자동)
-          onSuccess(data.content.download_url);
+        if (data && data.content) {
+          // GitHub Pages URL 사용 (raw.githubusercontent.com보다 모바일에서 안정적)
+          var pagesUrl = 'https://' + ghOwner + '.github.io/' + ghRepo + '/' + filename;
+          onSuccess(pagesUrl);
           showToast('✓ 이미지 업로드 완료', 'success');
         } else {
           showToast('이미지 업로드 실패', 'error');
