@@ -43,22 +43,10 @@ var MEDICINES = [
     "category": "보약·보양",
     "price": "99,000",
     "unit": "30포",
-    "tags": [
-      "경옥고",
-      "가정용",
-      "보양"
-    ],
-    "summary": "가정에서 간편하게 복용할 수 있는 경옥고 30포 제품입니다.",
-    "description": "전통 경옥고 처방을 현대적으로 재현한 가정용 제품입니다.\n폐를 보하고 노화를 방지하며 만성 피로, 기력 저하에 꾸준히 복용하기 좋습니다.",
-    "effects": [
-      "기력 회복",
-      "폐 기능 보조",
-      "노화 방지",
-      "피로 해소"
-    ],
+    "description": "<p>전통 경옥고 처방을 현대적으로 재현한 가정용 제품입니다.</p><p>폐를 보하고 노화를 방지하며 만성 피로, 기력 저하에 꾸준히 복용하기 좋습니다.</p>",
     "ingredients": "생지황, 인삼, 백복령, 봉밀(꿀)",
     "caution": "당뇨 환자는 복용 전 상담.",
-    "dosage": "1일 1~2포 공복 복용"
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086874125_xdskd.jpg"
   },
   {
     "id": "gyeongokgo",
