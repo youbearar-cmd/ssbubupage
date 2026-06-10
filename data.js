@@ -12,7 +12,7 @@ var CLINIC_INFO = {
   "formRevisit": "https://docs.google.com/forms/d/e/1FAIpQLScA7A6JgpweIRD2SUmaGNpp6Om0T3KuMbh4Jk7fALBL04o-8Q/viewform"
 };
 
-var CATEGORIES = ["전체","맞춤한약","보약·보양","면역·체력","소화기","호흡기","부인과","다이어트","기타"];
+var CATEGORIES = ["전체","맞춤한약","보약·보양","소화기","호흡기","다이어트","기타"];
 
 var MEDICINES = [
   {
