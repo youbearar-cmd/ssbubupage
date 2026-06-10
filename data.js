@@ -181,7 +181,7 @@ var MEDICINES = [
     "description": "<p>위장 운동을 촉진하고 소화 효소 분비를 돕는 한약재로 만든 스틱형 소화제입니다.</p><p>과식, 식체, 명치 답답함, 복부팽만에 복용합니다.</p>",
     "ingredients": "산사, 맥아, 신곡, 지실 외",
     "caution": "임산부는 복용 전 상담.",
-    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086792012_e12um.jpg"
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086850864_mez16.jpg"
   },
   {
     "id": "bohwa-hwan",
