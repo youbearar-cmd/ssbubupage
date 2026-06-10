@@ -439,6 +439,27 @@
       border-radius: 99px;
       margin-left: 5px;
     }
+
+    /* ── 순서 변경 ── */
+    .order-btn {
+      padding: 5px 9px;
+      border-radius: 5px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: all 0.12s;
+    }
+    .order-btn:hover:not(:disabled) { border-color: var(--green); color: var(--green); }
+    .order-btn:disabled { opacity: 0.25; cursor: default; }
+    .reorder-toggle-btn { border: 1.5px solid var(--border); color: var(--muted); background: transparent; }
+    .reorder-toggle-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
+    .medicine-table tr.drag-over td { background: #EDF7F2 !important; outline: 2px dashed var(--green); outline-offset: -2px; }
+    .medicine-table tr.dragging { opacity: 0.35; }
+    .drag-handle { cursor: grab; color: #CBD5E1; font-size: 1.15rem; user-select: none; padding: 0 4px; }
+    .drag-handle:active { cursor: grabbing; }
   </style>
 </head>
 <body>
@@ -495,14 +516,15 @@
         <input type="search" class="search-input" id="search-input"
           placeholder="약재명 검색..."
           oninput="renderTable()">
-        <button class="btn btn-green" onclick="openModal()">+ 새 약재 추가</button>
+        <button class="btn reorder-toggle-btn" id="reorder-toggle-btn" onclick="toggleReorderMode()">순서 변경</button>
+        <button class="btn btn-green" id="add-medicine-btn" onclick="openModal()">+ 새 약재 추가</button>
       </div>
     </div>
 
     <div class="table-scroll-wrap">
       <table class="medicine-table">
         <thead>
-          <tr>
+          <tr id="medicine-thead-row">
             <th style="width:130px;">약재명</th>
             <th style="width:90px;">카테고리</th>
             <th style="width:110px;">가격</th>
@@ -777,6 +799,8 @@ var editingIndex      = null;
 var editingMainImage  = null;
 var editingDetailImgs = [];
 var quill = null;  // Quill 에디터 인스턴스
+var reorderMode = false;
+var dragSrcIdx  = null;
 
 // ══════════════════════════════════════
 //  로그인 / 로그아웃
@@ -844,30 +868,64 @@ function switchTab(name) {
 //  약재 테이블
 // ══════════════════════════════════════
 function renderTable() {
-  var q = (document.getElementById('search-input').value || '').toLowerCase();
-  var tbody = document.getElementById('medicine-tbody');
+  var q = reorderMode ? '' : (document.getElementById('search-input').value || '').toLowerCase();
+  var tbody  = document.getElementById('medicine-tbody');
+  var thead  = document.getElementById('medicine-thead-row');
   var filtered = MEDICINES.filter(function(m) {
     return !q || m.name.toLowerCase().includes(q) || m.category.includes(q);
   });
 
   if (filtered.length === 0) {
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:32px;">약재가 없습니다.</td></tr>';
+    document.getElementById('medicine-count').textContent = MEDICINES.length;
     return;
   }
 
-  tbody.innerHTML = filtered.map(function(m) {
-    var realIdx = MEDICINES.indexOf(m);
-    return '<tr>' +
-      '<td class="name-cell">' + m.name + '</td>' +
-      '<td><span class="category-badge" style="font-size:0.72rem;">' + m.category + '</span></td>' +
-      '<td class="price-cell">₩' + m.price + '</td>' +
-      '<td style="color:var(--muted);">' + (m.unit || '—') + '</td>' +
-      '<td style="text-align:center;">' +
-        '<button class="action-btn edit-btn" onclick="openModal(' + realIdx + ')">수정</button>' +
-        '<button class="action-btn del-btn" onclick="deleteMedicine(' + realIdx + ')">삭제</button>' +
-      '</td>' +
-    '</tr>';
-  }).join('');
+  if (reorderMode) {
+    thead.innerHTML =
+      '<th style="width:32px;"></th>' +
+      '<th>약재명</th>' +
+      '<th style="width:90px;">카테고리</th>' +
+      '<th style="width:100px; text-align:right;">순서</th>';
+
+    tbody.innerHTML = filtered.map(function(m) {
+      var i = MEDICINES.indexOf(m);
+      return '<tr draggable="true"' +
+        ' ondragstart="onDragStart(event,' + i + ')"' +
+        ' ondragover="onDragOver(event,' + i + ')"' +
+        ' ondrop="onDrop(event,' + i + ')"' +
+        ' ondragend="onDragEnd(event)">' +
+        '<td><span class="drag-handle">⠿</span></td>' +
+        '<td class="name-cell">' + m.name + '</td>' +
+        '<td><span class="category-badge" style="font-size:0.72rem;">' + m.category + '</span></td>' +
+        '<td style="text-align:right; white-space:nowrap;">' +
+          '<button class="order-btn" onclick="moveItem(' + i + ',-1)"' + (i === 0 ? ' disabled' : '') + '>↑</button>' +
+          '<button class="order-btn" onclick="moveItem(' + i + ',1)" style="margin-left:4px;"' + (i === MEDICINES.length - 1 ? ' disabled' : '') + '>↓</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  } else {
+    thead.innerHTML =
+      '<th style="width:130px;">약재명</th>' +
+      '<th style="width:90px;">카테고리</th>' +
+      '<th style="width:110px;">가격</th>' +
+      '<th>기준 단위</th>' +
+      '<th style="width:120px; text-align:center;">관리</th>';
+
+    tbody.innerHTML = filtered.map(function(m) {
+      var realIdx = MEDICINES.indexOf(m);
+      return '<tr>' +
+        '<td class="name-cell">' + m.name + '</td>' +
+        '<td><span class="category-badge" style="font-size:0.72rem;">' + m.category + '</span></td>' +
+        '<td class="price-cell">₩' + m.price + '</td>' +
+        '<td style="color:var(--muted);">' + (m.unit || '—') + '</td>' +
+        '<td style="text-align:center;">' +
+          '<button class="action-btn edit-btn" onclick="openModal(' + realIdx + ')">수정</button>' +
+          '<button class="action-btn del-btn" onclick="deleteMedicine(' + realIdx + ')">삭제</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
 
   document.getElementById('medicine-count').textContent = MEDICINES.length;
 }
@@ -1422,6 +1480,71 @@ function getQuillContent() {
   if (!quill) return '';
   var html = quill.root.innerHTML;
   return (html === '<p><br></p>' || html === '<p></p>') ? '' : html;
+}
+
+// ══════════════════════════════════════
+//  순서 변경
+// ══════════════════════════════════════
+function toggleReorderMode() {
+  reorderMode = !reorderMode;
+  var btn       = document.getElementById('reorder-toggle-btn');
+  var searchEl  = document.getElementById('search-input');
+  var addBtn    = document.getElementById('add-medicine-btn');
+  if (reorderMode) {
+    btn.textContent = '✓ 완료';
+    btn.classList.add('active');
+    searchEl.value    = '';
+    searchEl.disabled = true;
+    addBtn.disabled   = true;
+    addBtn.style.opacity = '0.4';
+  } else {
+    btn.textContent = '순서 변경';
+    btn.classList.remove('active');
+    searchEl.disabled = false;
+    addBtn.disabled   = false;
+    addBtn.style.opacity = '';
+    saveToStorage();
+    showToast('✓ 순서가 저장되었습니다', 'success');
+  }
+  renderTable();
+}
+
+function moveItem(idx, dir) {
+  var to = idx + dir;
+  if (to < 0 || to >= MEDICINES.length) return;
+  var tmp = MEDICINES[idx];
+  MEDICINES[idx] = MEDICINES[to];
+  MEDICINES[to]  = tmp;
+  renderTable();
+}
+
+function onDragStart(e, idx) {
+  dragSrcIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(function() {
+    var rows = document.getElementById('medicine-tbody').querySelectorAll('tr');
+    rows.forEach(function(r, i) { if (i === idx) r.classList.add('dragging'); });
+  }, 0);
+}
+function onDragOver(e, idx) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  var rows = document.getElementById('medicine-tbody').querySelectorAll('tr');
+  rows.forEach(function(r) { r.classList.remove('drag-over'); });
+  if (rows[idx]) rows[idx].classList.add('drag-over');
+}
+function onDrop(e, idx) {
+  e.preventDefault();
+  if (dragSrcIdx === null || dragSrcIdx === idx) { onDragEnd(e); return; }
+  var moved = MEDICINES.splice(dragSrcIdx, 1)[0];
+  MEDICINES.splice(idx, 0, moved);
+  dragSrcIdx = null;
+  renderTable();
+}
+function onDragEnd(e) {
+  dragSrcIdx = null;
+  var rows = document.getElementById('medicine-tbody').querySelectorAll('tr');
+  rows.forEach(function(r) { r.classList.remove('dragging'); r.classList.remove('drag-over'); });
 }
 
 function nameToId(name) {
