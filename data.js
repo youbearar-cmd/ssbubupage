@@ -261,7 +261,7 @@ var MEDICINES = [
     "description": "<p>나중에</p>",
     "ingredients": "생지황, 인삼, 백복령, 봉밀(꿀)",
     "caution": "",
-    "image": ""
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086779065_88tt0.jpg"
   },
   {
     "id": "nalssin-3",
