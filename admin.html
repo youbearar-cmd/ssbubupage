@@ -745,7 +745,7 @@
 
     <div class="modal-actions">
       <button type="button" class="cancel-btn" onclick="closeModal()">취소</button>
-      <button type="button" class="save-btn" onclick="saveMedicine()">저장</button>
+      <button type="button" class="save-btn" id="modal-save-btn" onclick="saveMedicine()">저장 &amp; 배포</button>
     </div>
   </div>
 </div>
@@ -771,6 +771,7 @@ var editingDetailImgs = [];
 var quill = null;  // Quill 에디터 인스턴스
 var reorderMode = false;
 var dragSrcIdx  = null;
+var imageUploadPending = false;
 
 // ══════════════════════════════════════
 //  로그인 / 로그아웃
@@ -1000,15 +1001,43 @@ function saveMedicine() {
 
   if (editingIndex !== null) {
     MEDICINES[editingIndex] = med;
-    showToast('✓ 수정되었습니다', 'success');
   } else {
     MEDICINES.push(med);
-    showToast('✓ 약재가 추가되었습니다', 'success');
   }
 
   saveToStorage();
   renderTable();
   closeModal();
+  autoDeployToGitHub();
+}
+
+function autoDeployToGitHub() {
+  var token = localStorage.getItem('gh_token');
+  if (!token) {
+    showToast('저장됨. GitHub 연동 후 자동 배포됩니다.', 'success');
+    return;
+  }
+
+  showToast('배포 중...', 'success');
+
+  var content = buildDataJs();
+  var b64     = btoa(unescape(encodeURIComponent(content)));
+  var owner   = localStorage.getItem('gh_owner') || 'youbearar-cmd';
+  var repo    = localStorage.getItem('gh_repo')  || '--';
+
+  ghCommitFile(owner, repo, token, 'data.js', b64, '관리자 페이지에서 업데이트')
+  .then(function(r) {
+    if (r && r.ok) {
+      showToast('🚀 배포 완료! 1~2분 후 사이트에 반영됩니다.', 'success');
+      var statusEl = document.getElementById('gh-save-status');
+      if (statusEl) { statusEl.textContent = '✓ 완료!'; statusEl.style.color = 'var(--green)'; }
+    } else {
+      showToast('배포 실패. 내보내기 탭에서 재시도 하세요.', 'error');
+    }
+  })
+  .catch(function() {
+    showToast('네트워크 오류로 배포 실패. 내보내기 탭에서 재시도 하세요.', 'error');
+  });
 }
 
 function deleteMedicine(idx) {
@@ -1166,7 +1195,7 @@ function saveToGitHub() {
       localStorage.setItem('hanui_clinic',    JSON.stringify(CLINIC_INFO));
       status.textContent = '✓ 완료! 1~2분 후 사이트에 반영됩니다.';
       status.style.color = 'var(--green)';
-      showToast('🚀 GitHub 업로드 완료! Netlify가 자동 배포 중입니다.', 'success');
+      showToast('🚀 배포 완료! 1~2분 후 사이트에 반영됩니다.', 'success');
     } else {
       status.textContent = '저장 실패';
       status.style.color = 'var(--danger)';
@@ -1274,7 +1303,8 @@ function downloadDataJs() {
 // ══════════════════════════════════════
 //  이미지 업로드
 // ══════════════════════════════════════
-function uploadImageFile(file, onSuccess) {
+function uploadImageFile(file, onSuccess, onError) {
+  onError = onError || function() {};
   if (IS_LOCAL) {
     // 로컬 서버: /upload-image POST
     var formData = new FormData();
@@ -1283,9 +1313,9 @@ function uploadImageFile(file, onSuccess) {
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (data.ok) onSuccess(data.url);
-        else showToast('업로드 실패: ' + (data.error || ''), 'error');
+        else { showToast('업로드 실패: ' + (data.error || ''), 'error'); onError(); }
       })
-      .catch(function() { showToast('로컬 서버(server.py)를 실행해 주세요.', 'error'); });
+      .catch(function() { showToast('로컬 서버(server.py)를 실행해 주세요.', 'error'); onError(); });
   } else {
     // 배포 환경: GitHub에 이미지 커밋
     var ghToken = localStorage.getItem('gh_token');
@@ -1294,6 +1324,7 @@ function uploadImageFile(file, onSuccess) {
 
     if (!ghToken) {
       showToast('GitHub 연동 후 이미지를 업로드할 수 있습니다.', 'error');
+      onError();
       return;
     }
 
@@ -1314,9 +1345,10 @@ function uploadImageFile(file, onSuccess) {
           showToast('✓ 이미지 업로드 완료', 'success');
         } else {
           showToast('이미지 업로드 실패', 'error');
+          onError();
         }
       })
-      .catch(function() { showToast('이미지 업로드 오류', 'error'); });
+      .catch(function() { showToast('이미지 업로드 오류', 'error'); onError(); });
     };
     reader.readAsDataURL(file);
   }
@@ -1339,19 +1371,35 @@ function handleMainImgDrop(e) {
   var file = e.dataTransfer.files[0];
   if (file && file.type.startsWith('image/')) handleMainImgFile(file);
 }
+function setModalSaveBtn(loading) {
+  var btn = document.getElementById('modal-save-btn');
+  if (!btn) return;
+  btn.disabled = loading;
+  btn.textContent = loading ? '이미지 업로드 중...' : '저장 & 배포';
+}
 function handleMainImgFile(file) {
   if (!file) return;
+  imageUploadPending = true;
+  setModalSaveBtn(true);
   // 즉시 미리보기 (base64)
   var reader = new FileReader();
   reader.onload = function(e) {
-    editingMainImage = e.target.result;  // 임시 data URL
+    editingMainImage = e.target.result;  // 임시 data URL — 업로드 완료 전에는 저장 불가
     renderMainImgPreview();
   };
   reader.readAsDataURL(file);
-  // 서버 업로드
+  // GitHub 업로드 완료 후 URL로 교체
   uploadImageFile(file, function(url) {
     editingMainImage = url;
     renderMainImgPreview();
+    imageUploadPending = false;
+    setModalSaveBtn(false);
+  }, function() {
+    // 업로드 실패 시 미리보기 초기화 후 버튼 복원
+    editingMainImage = null;
+    renderMainImgPreview();
+    imageUploadPending = false;
+    setModalSaveBtn(false);
   });
 }
 function removeMainImg() {
