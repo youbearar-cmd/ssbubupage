@@ -57,7 +57,7 @@ var MEDICINES = [
     "description": "<p>경옥고(瓊玉膏)는 생지황·인삼·백복령·꿀로 만든 고(膏) 형태의 보약입니다.</p><p>폐를 윤택하게 하고 신장의 정기를 보충하여 허약 체질, 기침·천식 개선,</p><p>노화 방지에 널리 사용되어 왔습니다.</p>",
     "ingredients": "생지황, 인삼, 백복령, 봉밀(꿀)",
     "caution": "당뇨 환자는 꿀 함량으로 혈당 상승 가능 — 의사 상담 후 복용.",
-    "image": ""
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086969608_8j9ji.jpg"
   },
   {
     "id": "ssanghwa-box",
