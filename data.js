@@ -167,22 +167,10 @@ var MEDICINES = [
     "category": "기타",
     "price": "30,000",
     "unit": "30스틱",
-    "tags": [
-      "숙취해소",
-      "음주",
-      "간"
-    ],
-    "summary": "음주 전후 간 보호와 숙취 해소에 도움을 주는 한방 스틱 제품입니다.",
-    "description": "헛개나무·칡꽃·오리나무 추출물 등 간 기능 보조 한약재로 만든 스틱형 제품입니다.\n음주 전 또는 후에 복용하면 알코올 분해를 돕고 다음날 불쾌감을 줄여줍니다.",
-    "effects": [
-      "숙취 해소",
-      "간 기능 보조",
-      "알코올 분해 촉진",
-      "두통·메스꺼움 완화"
-    ],
+    "description": "<p>헛개나무·칡꽃·오리나무 추출물 등 간 기능 보조 한약재로 만든 스틱형 제품입니다.</p><p>음주 전 또는 후에 복용하면 알코올 분해를 돕고 다음날 불쾌감을 줄여줍니다.</p>",
     "ingredients": "헛개나무, 칡꽃, 오리나무 추출물 외",
     "caution": "간 질환자는 복용 전 상담.",
-    "dosage": "음주 전후 1스틱 복용"
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086804035_zrcet.jpg"
   },
   {
     "id": "youngsin-hwan",
