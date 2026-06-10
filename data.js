@@ -337,6 +337,17 @@ var MEDICINES = [
     "ingredients": "황련, 황금, 황백, 치자 추출물",
     "caution": "눈·점막에 사용 금지. 자극 시 즉시 제거.",
     "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781085931116_lez23.jpg"
+  },
+  {
+    "id": "은교산-1781088742774",
+    "name": "은교산",
+    "category": "호흡기",
+    "price": "20,000",
+    "unit": "",
+    "description": "",
+    "ingredients": "",
+    "caution": "",
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781088738618_0v99t.jpg"
   }
 ];
 
