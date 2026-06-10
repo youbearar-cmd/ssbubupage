@@ -177,22 +177,10 @@ var MEDICINES = [
     "category": "소화기",
     "price": "20,000",
     "unit": "30환",
-    "tags": [
-      "소화제",
-      "위장",
-      "식체"
-    ],
-    "summary": "식체·소화불량·가스에 처방하는 전통 한방 소화환입니다.",
-    "description": "소화를 돕고 위장 기능을 회복시키는 한약재로 만든 환약 형태의 소화제입니다.\n식후 더부룩함, 가스, 명치 통증에 빠르게 작용합니다.",
-    "effects": [
-      "소화 개선",
-      "가스 배출",
-      "식체 해소",
-      "위장 안정"
-    ],
+    "description": "<p>소화를 돕고 위장 기능을 회복시키는 한약재로 만든 환약 형태의 소화제입니다.</p><p>식후 더부룩함, 가스, 명치 통증에 빠르게 작용합니다.</p>",
     "ingredients": "목향, 사인, 지실, 후박 외",
     "caution": "임산부는 복용 전 상담.",
-    "dosage": "식후 1~2환, 1일 3회"
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781088713361_m430w.jpg"
   },
   {
     "id": "sojeok-hwan",
