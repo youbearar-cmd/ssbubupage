@@ -236,22 +236,10 @@ var MEDICINES = [
     "category": "소화기",
     "price": "9,000",
     "unit": "1통",
-    "tags": [
-      "소화제",
-      "소아",
-      "식욕"
-    ],
-    "summary": "소화기를 강화하고 식욕을 돋우는 한방 소화환입니다.",
-    "description": "비위(脾胃)를 튼튼히 하고 음식 소화를 도와 만성 소화불량, 식욕 부진, 복통에 활용됩니다.",
-    "effects": [
-      "소화기 강화",
-      "식욕 증진",
-      "만성 소화불량 개선",
-      "복통 완화"
-    ],
+    "description": "<p>비위(脾胃)를 튼튼히 하고 음식 소화를 도와 만성 소화불량, 식욕 부진, 복통에 활용됩니다.</p>",
     "ingredients": "백출, 산사, 맥아, 신곡 외",
     "caution": "임산부는 복용 전 상담.",
-    "dosage": "식전 복용, 1일 2~3회"
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086644264_ouuwg.jpg"
   },
   {
     "id": "nalssin-1",
