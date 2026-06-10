@@ -190,22 +190,10 @@ var MEDICINES = [
     "category": "소화기",
     "price": "24,000",
     "unit": "30스틱",
-    "tags": [
-      "소화제",
-      "위장",
-      "소화불량"
-    ],
-    "summary": "소화불량·식체·복부팽만에 빠르게 작용하는 한방 소화제입니다.",
-    "description": "위장 운동을 촉진하고 소화 효소 분비를 돕는 한약재로 만든 스틱형 소화제입니다.\n과식, 식체, 명치 답답함, 복부팽만에 복용합니다.",
-    "effects": [
-      "소화 촉진",
-      "식체 해소",
-      "복부팽만 완화",
-      "위장 기능 회복"
-    ],
+    "description": "<p>위장 운동을 촉진하고 소화 효소 분비를 돕는 한약재로 만든 스틱형 소화제입니다.</p><p>과식, 식체, 명치 답답함, 복부팽만에 복용합니다.</p>",
     "ingredients": "산사, 맥아, 신곡, 지실 외",
     "caution": "임산부는 복용 전 상담.",
-    "dosage": "식후 1스틱, 1일 3회"
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086792012_e12um.jpg"
   },
   {
     "id": "bohwa-hwan",
