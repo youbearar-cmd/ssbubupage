@@ -134,21 +134,10 @@ var MEDICINES = [
     "category": "맞춤한약",
     "price": "450,000",
     "unit": "30일 60팩",
-    "tags": [
-      "맞춤처방",
-      "탕약",
-      "30일"
-    ],
-    "summary": "한의사가 체질과 증상에 맞게 조제하는 30일분 맞춤 한약입니다.",
-    "description": "개인 체질·증상에 맞춰 한의사가 직접 처방·조제하는 탕약입니다.\n하루 2팩(아침·저녁) 복용하며, 냉장 보관합니다.",
-    "effects": [
-      "체질 맞춤 치료",
-      "증상 개선",
-      "체력 회복"
-    ],
+    "description": "<p>개인 체질·증상에 맞춰 한의사가 직접 처방·조제하는 탕약입니다.</p><p>하루 2팩(아침·저녁) 복용하며, 냉장 보관합니다.</p>",
     "ingredients": "처방에 따라 개인별 조제",
     "caution": "처방전 없이 임의 복용 금지.",
-    "dosage": "1일 2팩 (아침·저녁) 식후 복용"
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086458617_ira7p.png"
   },
   {
     "id": "soa-under30",
