@@ -140,7 +140,7 @@ var MEDICINES = [
   },
   {
     "id": "soa-over30",
-    "name": "소아한약 (30kg 이상)",
+    "name": "소아한약 15일 (30kg 미만)",
     "category": "맞춤한약",
     "price": "450,000",
     "unit": "30일 60팩",
@@ -194,28 +194,6 @@ var MEDICINES = [
     "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086644264_ouuwg.jpg"
   },
   {
-    "id": "nalssin-1",
-    "name": "날씬환 1달",
-    "category": "다이어트",
-    "price": "190,000",
-    "unit": "1달분",
-    "description": "<p>방풍통성산·태음조위탕 등 다이어트 처방을 기반으로 개인 체질에 맞게 가감하여 조제한 환약입니다.</p><p>식욕 억제, 부종 완화, 대사 촉진을 통해 건강한 체중 감량을 돕습니다.</p>",
-    "ingredients": "체질별 개인 처방",
-    "caution": "반드시 한의사 상담 후 처방. 임산부 금기.",
-    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086514777_2mtnq.jpg"
-  },
-  {
-    "id": "가정용-경옥고-1781084165274",
-    "name": "가정용 경옥고",
-    "category": "보약·보양",
-    "price": "90000",
-    "unit": "30포",
-    "description": "<p>나중에</p>",
-    "ingredients": "생지황, 인삼, 백복령, 봉밀(꿀)",
-    "caution": "",
-    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086779065_88tt0.jpg"
-  },
-  {
     "id": "nalssin-3",
     "name": "날씬환 3달",
     "category": "다이어트",
@@ -225,6 +203,17 @@ var MEDICINES = [
     "ingredients": "체질별 개인 처방",
     "caution": "반드시 한의사 상담 후 처방. 임산부 금기.",
     "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086526903_oy5qx.jpg"
+  },
+  {
+    "id": "nalssin-1",
+    "name": "날씬환 1달",
+    "category": "다이어트",
+    "price": "190,000",
+    "unit": "1달분",
+    "description": "<p>방풍통성산·태음조위탕 등 다이어트 처방을 기반으로 개인 체질에 맞게 가감하여 조제한 환약입니다.</p><p>식욕 억제, 부종 완화, 대사 촉진을 통해 건강한 체중 감량을 돕습니다.</p>",
+    "ingredients": "체질별 개인 처방",
+    "caution": "반드시 한의사 상담 후 처방. 임산부 금기.",
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086514777_2mtnq.jpg"
   },
   {
     "id": "pas-normal",
