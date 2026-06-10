@@ -711,31 +711,12 @@
         <input type="text" class="form-control" id="f-unit" placeholder="예) 10환 기준">
       </div>
       <div class="form-group full">
-        <label>태그 (쉼표로 구분)</label>
-        <input type="text" class="form-control" id="f-tags" placeholder="예) 피로회복, 원기보충, 간 기능">
-        <span class="field-hint">목록 카드에 표시되는 키워드입니다.</span>
-      </div>
-      <div class="form-group full">
-        <label>한줄 요약 <span class="required">*</span></label>
-        <input type="text" class="form-control" id="f-summary" placeholder="목록 카드에 표시되는 짧은 설명">
-      </div>
-      <div class="form-group full">
         <label>상세 설명 <span class="field-hint" style="font-weight:400; text-transform:none;">(이미지·글자색·크기 등 자유롭게 편집)</span></label>
         <div id="quill-editor" style="min-height:240px; background:#fff; border-radius:0 0 7px 7px;"></div>
       </div>
       <div class="form-group full">
-        <label>주요 효능 (줄바꿈으로 구분)</label>
-        <textarea class="form-control" id="f-effects" rows="3"
-          placeholder="원기·체력 회복&#10;간 기능 강화&#10;면역력 향상"></textarea>
-        <span class="field-hint">한 줄에 하나씩 입력하세요.</span>
-      </div>
-      <div class="form-group">
         <label>주성분</label>
         <input type="text" class="form-control" id="f-ingredients" placeholder="예) 녹용, 당귀, 산수유">
-      </div>
-      <div class="form-group">
-        <label>복용법</label>
-        <input type="text" class="form-control" id="f-dosage" placeholder="예) 1일 2회 식후 복용">
       </div>
       <div class="form-group full">
         <label>주의사항</label>
@@ -760,15 +741,6 @@
         </div>
       </div>
 
-      <div class="form-group full">
-        <label>상세이미지 <span class="field-hint" style="font-weight:400; text-transform:none;">(여러 장 추가 가능)</span></label>
-        <div class="detail-imgs-grid" id="detail-imgs-grid">
-          <button type="button" class="add-img-btn" onclick="document.getElementById('detail-file-input').click()">
-            <span style="font-size:1.8rem; line-height:1;">+</span>
-            <span style="font-size:0.72rem; margin-top:4px;">추가</span>
-          </button>
-        </div>
-      </div>
     </div>
 
     <div class="modal-actions">
@@ -781,8 +753,6 @@
 <!-- 숨겨진 파일 입력 (모달 외부 — 버튼 겹침 방지) -->
 <input type="file" id="main-file-input" accept="image/*" style="display:none"
        onchange="handleMainImgFile(this.files[0]); this.value=''">
-<input type="file" id="detail-file-input" accept="image/*" multiple style="display:none"
-       onchange="handleDetailImgFiles(this.files); this.value=''">
 <input type="file" id="quill-img-input" accept="image/*" style="display:none"
        onchange="handleQuillImage(this.files[0]); this.value=''">
 
@@ -978,27 +948,19 @@ function openModal(idx) {
     document.getElementById('f-category').value    = m.category;
     document.getElementById('f-price').value       = m.price;
     document.getElementById('f-unit').value        = m.unit || '';
-    document.getElementById('f-tags').value        = (m.tags || []).join(', ');
-    document.getElementById('f-summary').value = m.summary || '';
     setQuillContent(m.description || '');
-    document.getElementById('f-effects').value     = (m.effects || []).join('\n');
     document.getElementById('f-ingredients').value = m.ingredients || '';
-    document.getElementById('f-dosage').value      = m.dosage || '';
     document.getElementById('f-caution').value     = m.caution || '';
     editingMainImage  = m.image  || null;
-    editingDetailImgs = (m.images || []).slice();
   } else {
     document.getElementById('modal-title').textContent = '새 약재 추가';
-    ['f-name','f-category','f-price','f-unit','f-tags','f-summary',
-     'f-effects','f-ingredients','f-dosage','f-caution'].forEach(function(id) {
+    ['f-name','f-category','f-price','f-unit','f-ingredients','f-caution'].forEach(function(id) {
       document.getElementById(id).value = '';
     });
     setQuillContent('');
     editingMainImage  = null;
-    editingDetailImgs = [];
   }
   renderMainImgPreview();
-  renderDetailImgsGrid();
   clearFormErrors();
   document.getElementById('f-name').focus();
 }
@@ -1018,17 +980,11 @@ function saveMedicine() {
   var name     = document.getElementById('f-name').value.trim();
   var category = document.getElementById('f-category').value;
   var price    = document.getElementById('f-price').value.trim();
-  var summary  = document.getElementById('f-summary').value.trim();
-
   var hasError = false;
   if (!name)     { markError('f-name');     hasError = true; }
   if (!category) { markError('f-category'); hasError = true; }
   if (!price)    { markError('f-price');    hasError = true; }
-  if (!summary)  { markError('f-summary');  hasError = true; }
   if (hasError) return;
-
-  var tags    = document.getElementById('f-tags').value.split(',').map(function(t){return t.trim();}).filter(Boolean);
-  var effects = document.getElementById('f-effects').value.split('\n').map(function(t){return t.trim();}).filter(Boolean);
 
   var med = {
     id:          editingIndex !== null ? MEDICINES[editingIndex].id : nameToId(name),
@@ -1036,15 +992,10 @@ function saveMedicine() {
     category:    category,
     price:       price,
     unit:        document.getElementById('f-unit').value.trim(),
-    tags:        tags,
-    summary:     summary,
     description: getQuillContent(),
-    effects:     effects,
     ingredients: document.getElementById('f-ingredients').value.trim(),
-    dosage:      document.getElementById('f-dosage').value.trim(),
     caution:     document.getElementById('f-caution').value.trim(),
     image:       editingMainImage  || '',
-    images:      editingDetailImgs.slice(),
   };
 
   if (editingIndex !== null) {
@@ -1419,46 +1370,6 @@ function renderMainImgPreview() {
     wrap.style.display = 'none';
     zone.style.display = 'block';
   }
-}
-
-// ── 상세이미지 ──
-function handleDetailImgFiles(files) {
-  Array.from(files).forEach(function(file) {
-    if (!file.type.startsWith('image/')) return;
-    // 임시 data URL로 먼저 추가
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var tempUrl = e.target.result;
-      var idx = editingDetailImgs.length;
-      editingDetailImgs.push(tempUrl);
-      renderDetailImgsGrid();
-      // 서버 업로드 후 URL 교체
-      uploadImageFile(file, function(serverUrl) {
-        editingDetailImgs[idx] = serverUrl;
-        renderDetailImgsGrid();
-      });
-    };
-    reader.readAsDataURL(file);
-  });
-}
-function removeDetailImg(idx) {
-  editingDetailImgs.splice(idx, 1);
-  renderDetailImgsGrid();
-}
-function renderDetailImgsGrid() {
-  var grid = document.getElementById('detail-imgs-grid');
-  var html = editingDetailImgs.map(function(url, idx) {
-    return '<div class="detail-img-thumb">' +
-      '<img src="' + url + '" alt="상세이미지' + (idx+1) + '">' +
-      '<button class="remove-img" onclick="removeDetailImg(' + idx + ')" title="삭제">✕</button>' +
-    '</div>';
-  }).join('');
-  // + 추가 버튼
-  html += '<button type="button" class="add-img-btn" onclick="document.getElementById(\'detail-file-input\').click()">' +
-    '<span style="font-size:1.8rem; line-height:1;">+</span>' +
-    '<span style="font-size:0.72rem; margin-top:4px;">추가</span>' +
-  '</button>';
-  grid.innerHTML = html;
 }
 
 // ══════════════════════════════════════
