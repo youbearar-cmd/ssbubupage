@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>초진 신청 | 성산부부한의원 비대면 처방</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+  <style>
+    .form-wrap {
+      background: #fff;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 0 40px;
+    }
+    .form-info-bar {
+      background: #EDF7F2;
+      border-bottom: 1px solid #C6E9D8;
+      padding: 12px 20px;
+      font-size: 0.85rem;
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .google-form-iframe {
+      width: 100%;
+      min-height: 100vh;
+      border: none;
+      display: block;
+    }
+    /* 로딩 중 스피너 */
+    .iframe-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .loader-ring {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo" id="clinic-name-header">한의원</a>
+    <nav>
+      <a href="index.html">홈</a>
+      <a href="medicines.html">비급여 목록</a>
+      <a href="order.html" class="active">구매 신청</a>
+    </nav>
+  </div>
+</header>
+
+<div style="background:var(--green); color:#fff; padding:20px 16px 24px;">
+  <div class="container">
+    <a href="order.html" style="font-size:0.82rem; opacity:0.8; display:inline-flex; align-items:center; gap:4px; margin-bottom:10px;">
+      ← 뒤로
+    </a>
+    <h1 style="font-size:1.3rem; font-weight:700; display:flex; align-items:center; gap:8px;">
+      🌱 초진 신청서
+    </h1>
+    <p style="opacity:0.85; font-size:0.85rem; margin-top:4px;">
+      처음 방문하시거나 1년 이상 내원하지 않으신 분
+    </p>
+  </div>
+</div>
+
+<div class="form-wrap">
+  <div class="form-info-bar">
+    ✅ 작성하신 내용은 한의원으로 즉시 전달됩니다.
+  </div>
+
+  <!-- 로딩 표시 -->
+  <div class="iframe-loader" id="form-loader">
+    <div class="loader-ring"></div>
+    <span>신청서를 불러오는 중...</span>
+  </div>
+
+  <!-- 구글폼 iframe -->
+  <iframe
+    id="google-form"
+    class="google-form-iframe"
+    src="https://docs.google.com/forms/d/e/1FAIpQLSfx7T_l30UsE7ExLoOhvtIKqeB-SOCtExfgkXJMm-6rCdHKsg/viewform?embedded=true"
+    style="display:none;"
+    onload="formLoaded()"
+    allow="camera; microphone">
+  </iframe>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <strong id="footer-name"></strong><br>
+    <span id="footer-address"></span><br>
+    <a id="footer-phone-link" href="#" style="color:#9CA3AF;"></a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('clinic-name-header').textContent = CLINIC_INFO.name;
+  document.getElementById('footer-name').textContent        = CLINIC_INFO.name;
+  document.getElementById('footer-address').textContent     = CLINIC_INFO.address;
+  var phoneLink = document.getElementById('footer-phone-link');
+  phoneLink.textContent = CLINIC_INFO.phone;
+  phoneLink.href = 'tel:' + CLINIC_INFO.phone.replace(/-/g, '');
+
+  function formLoaded() {
+    document.getElementById('form-loader').style.display = 'none';
+    document.getElementById('google-form').style.display = 'block';
+  }
+
+  // 5초 후에도 안 뜨면 직접 링크 제공
+  setTimeout(function() {
+    var loader = document.getElementById('form-loader');
+    if (loader.style.display !== 'none') {
+      loader.innerHTML =
+        '<p style="color:var(--muted); font-size:0.875rem; text-align:center; padding:0 20px;">' +
+        '폼을 불러오는 데 시간이 걸립니다.<br>' +
+        '<a href="' + CLINIC_INFO.formFirstVisit + '" target="_blank" ' +
+        'style="color:var(--green); font-weight:700; text-decoration:underline;">' +
+        '→ 새 탭에서 신청서 열기</a></p>';
+    }
+  }, 5000);
+</script>
+
+</body>
+</html>
