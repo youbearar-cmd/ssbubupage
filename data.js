@@ -346,22 +346,10 @@ var MEDICINES = [
     "category": "호흡기",
     "price": "12,000",
     "unit": "1개",
-    "tags": [
-      "비염",
-      "코세척",
-      "외용"
-    ],
-    "summary": "비염·코막힘 개선을 위해 코에 뿌리는 한방 비강 스프레이입니다.",
-    "description": "신이·박하·창이자 등 비염에 효과적인 한약재 추출물로 만든 비강 스프레이입니다.\n코 안을 세정하고 점막을 진정시켜 비염, 코막힘, 건조감을 완화합니다.",
-    "effects": [
-      "비염 완화",
-      "코막힘 해소",
-      "비강 세정",
-      "점막 보호"
-    ],
+    "description": "<p>신이·박하·창이자 등 비염에 효과적인 한약재 추출물로 만든 비강 스프레이입니다.</p><p>코 안을 세정하고 점막을 진정시켜 비염, 코막힘, 건조감을 완화합니다.</p>",
     "ingredients": "신이, 박하, 창이자, 황금 추출물",
     "caution": "눈에 들어가지 않도록 주의.",
-    "dosage": "1일 3~4회 각 비강에 1~2회 분무"
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086817494_jmqzv.jpg"
   },
   {
     "id": "ilhwang-go",
