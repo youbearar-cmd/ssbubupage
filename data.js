@@ -17,7 +17,7 @@ var CATEGORIES = ["전체","맞춤한약","보약·보양","소화기","호흡�
 var MEDICINES = [
   {
     "id": "gongjindan",
-    "name": "공진단",
+    "name": "명품 공진단",
     "category": "보약·보양",
     "price": "150,000",
     "unit": "10환 기준",
