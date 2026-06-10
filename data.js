@@ -145,22 +145,10 @@ var MEDICINES = [
     "category": "맞춤한약",
     "price": "350,000",
     "unit": "30일 60팩",
-    "tags": [
-      "소아",
-      "성장",
-      "30kg미만"
-    ],
-    "summary": "30kg 미만 소아의 성장·면역·소화 등에 맞춤 처방하는 한약입니다.",
-    "description": "소아 체중·연령·증상에 맞게 처방·조제하는 탕약입니다.\n성장 촉진, 식욕 부진, 잦은 감기, 면역력 강화에 활용됩니다.",
-    "effects": [
-      "성장 보조",
-      "면역력 강화",
-      "소화 개선",
-      "체력 증진"
-    ],
+    "description": "<p>소아 체중·연령·증상에 맞게 처방·조제하는 탕약입니다.</p><p>성장 촉진, 식욕 부진, 잦은 감기, 면역력 강화에 활용됩니다.</p>",
     "ingredients": "처방에 따라 개인별 조제",
     "caution": "반드시 한의사 처방 후 복용.",
-    "dosage": "1일 2팩 (아침·저녁) 식후 복용"
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086613727_prszo.png"
   },
   {
     "id": "soa-over30",
