@@ -35,7 +35,7 @@ var MEDICINES = [
     "description": "<p>나중에</p>",
     "ingredients": "녹용, 당귀, 산수유, 사향",
     "caution": "",
-    "image": ""
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781085979442_oxevg.jpg"
   },
   {
     "id": "gyeongokgo-home",
