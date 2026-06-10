@@ -305,22 +305,10 @@ var MEDICINES = [
     "category": "다이어트",
     "price": "390,000",
     "unit": "3달분",
-    "tags": [
-      "다이어트",
-      "체중감량",
-      "장기과정"
-    ],
-    "summary": "체질에 맞게 처방하는 한방 다이어트 환약 3달 과정입니다.",
-    "description": "방풍통성산·태음조위탕 등 다이어트 처방을 기반으로 개인 체질에 맞게 가감하여 조제한 환약입니다.\n3달 장기 복용으로 요요 없는 체중 관리를 목표로 합니다.",
-    "effects": [
-      "체중 감량",
-      "요요 방지",
-      "식욕 억제",
-      "체질 개선"
-    ],
+    "description": "<p>방풍통성산·태음조위탕 등 다이어트 처방을 기반으로 개인 체질에 맞게 가감하여 조제한 환약입니다.</p><p>3달 장기 복용으로 요요 없는 체중 관리를 목표로 합니다.</p>",
     "ingredients": "체질별 개인 처방",
     "caution": "반드시 한의사 상담 후 처방. 임산부 금기.",
-    "dosage": "1일 2~3회 식전 복용"
+    "image": "https://raw.githubusercontent.com/youbearar-cmd/ssbubupage/main/images/1781086526903_oy5qx.jpg"
   },
   {
     "id": "pas-normal",
