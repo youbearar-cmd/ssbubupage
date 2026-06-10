@@ -129,7 +129,7 @@ var MEDICINES = [
   },
   {
     "id": "soa-under30",
-    "name": "소아한약 (30kg 미만)",
+    "name": "소아한약 30일 (30kg 미만)",
     "category": "맞춤한약",
     "price": "350,000",
     "unit": "30일 60팩",
